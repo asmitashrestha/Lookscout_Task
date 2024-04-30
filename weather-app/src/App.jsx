@@ -3,7 +3,7 @@ import Weather from './components/Weather'
 
 const App = () => {
   return (
-    <div>
+    <div className=''>
       <Weather/>
     </div>
   )
