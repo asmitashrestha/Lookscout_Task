@@ -35,12 +35,26 @@ const Weather = () => {
     setSelectedCity(null);
   };
 
+  const handleSelectedCity = (option) => {
+    // Parse latitude and longitude to integers
+    const parsedCity = {
+      ...option,
+      value: {
+        latitude: parseInt(option.value.latitude),
+        longitude: parseInt(option.value.longitude),
+      },
+    };
+    setSelectedCity(parsedCity);
+  }
+
   return (
     <div className="bg-cyan-500 min-h-screen flex justify-center">
       <div className="container bg-white flex justify-center relative top-16">
         <div>
           <div className="flex justify-center">
-            <p className="text-gray-600 mr-2">Right now in </p>
+            <p className="text-gray-600 mr-2">
+              Right now in 
+             </p>
             <div className="flex">
               <Select
                 options={allCountries}
@@ -59,6 +73,8 @@ const Weather = () => {
                   },
                   label:city.name,
                 }))}
+                value={selectedCity}
+                onChange={handleSelectedCity}
                 className="custom-select"
                 style={{ marginRight: "5px" }}
               />
@@ -72,7 +88,9 @@ const Weather = () => {
             </div>
             <div className="">
               <p className="text-gray-950 text-[40px] ">99</p>
-              <p className="text-gray-600 text-sm">66/43</p>
+              <p className="text-gray-600 text-sm">{selectedCity?.value?.latitude} °| {""}
+              {selectedCity?.value?.longitude} °</p>
+              <h3>{selectedCountry?.label},{selectedCity?.label}</h3>
             </div>
             <div className="text-gray-600">
               <div className="flex">
