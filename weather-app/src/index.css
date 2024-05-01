@@ -7,3 +7,11 @@
   width: 700px;
   padding: 80px;
 }
+
+.custom-select  {
+  border: none;
+  border-radius: 0;
+  border-color: transparent;
+  box-shadow: none;
+  outline-offset: 0px;
+}

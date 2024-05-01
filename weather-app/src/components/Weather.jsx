@@ -1,14 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CiTempHigh } from "react-icons/ci";
 import { CiUmbrella } from "react-icons/ci";
 import { CiDroplet } from "react-icons/ci";
 import Mix from "../assets/mix.jpeg";
-
+import { City, Country } from "country-state-city";
+import Select from "react-select";
 const Weather = () => {
-  const [unit, setUnit] = useState('F');
-
+  const [unit, setUnit] = useState("F");
+  const [allCountries, setAllCountries] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState({});
+  const [selectedCity, setSelectedCity] = useState([]);
   const toggleUnit = () => {
-    setUnit(unit === 'F' ? 'C' : 'F');
+    setUnit(unit === "F" ? "C" : "F");
+  };
+
+  useEffect(() => {
+    // Use Country.getAllCountries() to get all countries
+    setAllCountries(
+      Country.getAllCountries().map((country) => ({
+        value: {
+          latitude: country.latitude,
+          longitude: country.longitude,
+          isoCode: country.isoCode,
+        },
+        label: country.name,
+      }))
+    );
+  }, []);
+
+  console.log(allCountries);
+
+  const handleSelectedCountry = (option) => {
+    setSelectedCountry(option);
+    setSelectedCity(null);
   };
 
   return (
@@ -17,10 +41,25 @@ const Weather = () => {
         <div>
           <div className="flex justify-center">
             <p className="text-gray-600 mr-2">Right now in </p>
-            <div className="">
-              <input
-                type="text"
-                className="border-none outline-none text-black font-bold text-xl"
+            <div className="flex">
+              <Select
+                options={allCountries}
+                value={selectedCountry}
+                onChange={handleSelectedCountry}
+                className="custom-select border-none outline-none text-black font-bold text-xl"
+                style={{ marginRight: "5px" }}
+              />
+              <Select
+                options={City.getCitiesOfCountry(
+                  selectedCountry?.value?.isoCode
+                ).map((city)=>({
+                  value: {
+                    latitude: city.latitude,
+                    longitude:city.longitude,
+                  },
+                  label:city.name,
+                }))}
+                className="custom-select"
                 style={{ marginRight: "5px" }}
               />
               <hr />
@@ -117,14 +156,14 @@ const Weather = () => {
           <div className="flex justify-center mt-7">
             <button
               onClick={toggleUnit}
-              className={`text-gray-600 ${unit === 'F' ? 'text-black' : ''}`}
+              className={`text-gray-600 ${unit === "F" ? "text-black" : ""}`}
             >
               F
             </button>
             <span className="mx-1">|</span>
             <button
               onClick={toggleUnit}
-              className={`text-gray-600 ${unit === 'C' ? 'text-black' : ''}`}
+              className={`text-gray-600 ${unit === "C" ? "text-black" : ""}`}
             >
               C
             </button>
